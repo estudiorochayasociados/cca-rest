@@ -1,10 +1,10 @@
-const axios = require("axios");
 const VehicleModel = require("../model/VehicleModel");
 var ObjectId = require("mongoose").Types.ObjectId;
 
-exports.list = async () => {
+exports.list = async (filter = {}) => {
+  console.log("----------");
   return new Promise((resolve, reject) => {
-    VehicleModel.find((err, res) => {
+    VehicleModel.find(filter, (err, res) => {
       if (err) reject(err.message);
       resolve(res);
     });

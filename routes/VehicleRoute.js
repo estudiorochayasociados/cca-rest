@@ -1,11 +1,10 @@
-const express = require("express");
-const config = require("dotenv").config();
-// const Middelware = require("../config/Middleware");
+const express = require("express"); 
 const VehicleController = require("../controller/VehicleController");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const get = await VehicleController.list();
+  console.log(req.body);
+  const get = await VehicleController.list(req.body);
   res.status(200).send(get);
 });
 
@@ -40,7 +39,7 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const get = await VehicleController.update(req.params.id,req.body);
+  const get = await VehicleController.update(req.params.id, req.body);
   res.status(200).send({ get });
 });
 
