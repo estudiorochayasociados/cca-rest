@@ -19,3 +19,4 @@ app.listen(process.env.PORT || 3000);
 //Routes
 
 app.use("/vehicle", require("./routes/VehicleRoute"));
+app.use("/user", require("./routes/UserRoute"));
