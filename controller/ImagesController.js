@@ -1,10 +1,12 @@
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
-
+const config = process.env.CLOUDINARY_NAME
+  ? process.env
+  : require("dotenv").config().parsed;
 cloudinary.config({
-  cloud_name: "estudio-rocha",
-  api_key: "277513911695881",
-  api_secret: "Bnrsp5To7QtseJrKFTKzj0QJYDc",
+  cloud_name: config.CLOUDINARY_NAME,
+  api_key: config.CLOUDINARY_KEY,
+  api_secret: config.CLOUDINARY_SECRET,
 });
 
 exports.uploads = (file) => {
