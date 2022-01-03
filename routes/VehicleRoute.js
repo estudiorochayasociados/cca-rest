@@ -1,9 +1,9 @@
 const express = require("express");
 const VehicleController = require("../controller/VehicleController");
-const ImagesController = require("../controller/ImagesController");
 const Middleware = require("../config/Middleware");
 const router = express.Router();
-const upload = require("../utils/Multer");
+const MulterController = require("../utils/Multer");
+const ImagesController = require("../utils/Images");
 
 router.get("/", Middleware.checkToken, async (req, res) => {
   await VehicleController.list(req.body)
@@ -59,7 +59,7 @@ router.delete(
 router.post(
   "/",
   Middleware.checkToken,
-  upload.array("images", 10),
+  MulterController.array("images", 10),
   async (req, res) => {
     if (req.files) {
       req.body.images = await ImagesController.uploadMany(req.files);
@@ -77,7 +77,7 @@ router.post(
 router.put(
   "/:id",
   Middleware.checkToken,
-  upload.array("images", 10),
+  MulterController.array("images", 10),
   async (req, res) => {
     if (req.files) {
       req.body.images.concat(await ImagesController.uploadMany(req.files));
