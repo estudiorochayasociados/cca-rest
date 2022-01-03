@@ -5,48 +5,69 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.get("/", Middelware.checkToken, async (req, res) => {
-  const get = await UserController.list();
-  res.status(200).send(get);
-});
-
-router.get("/check-token", Middelware.checkToken, (req, res) => {
-  console.log(req);
-  res.status(200).json({ status: true });
+  await UserController.list(req.body)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 });
 
 router.get("/:id", Middelware.checkToken, async (req, res) => {
-  let view = await UserController.view(req.params.id);
-  res.status(200).json(view);
+  await UserController.view(req.params.id)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 });
 
 router.post("/", async (req, res) => {
-  const response = await UserController.create(req.body);
-  res.status(200).send({ response });
-});
-
-router.post("/auth", async (req, res) => {
-  const login = await UserController.login(req.body.email, req.body.password);
-  if (login) {
-    const token = jwt.sign({ check: true }, process.env.JWT, {
-      expiresIn: "1h",
+  await UserController.create(req.body)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
     });
-    res.json({
-      message: "Autenticación correcta",
-      token: token,
-    });
-  } else {
-    res.json({ error: "Usuario o contraseña incorrectos" });
-  }
 });
 
 router.put("/", Middelware.checkToken, async (req, res) => {
-  let view = await UserController.view(req.params.id);
-  res.status(200).json(view);
+  await UserController.update(req.params.id, req.body)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 });
 
 router.delete("/:id", Middelware.checkToken, async (req, res) => {
-  let del = await UserController.delete(req.params.id);
-  res.status(200).json(del);
+  await UserController.delete(req.params.id)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
+
+router.post("/auth", async (req, res) => {
+  await UserController.login(req.body.email, req.body.password)
+    .then((data) => {
+      let dataResponse = {
+        message: "Autenticación correcta",
+        token: jwt.sign({ check: true }, process.env.JWT, {
+          expiresIn: "1h",
+        }),
+      };
+      res.status(200).json(dataResponse);
+    })
+    .catch((err) => {
+      res.json({ error: "Usuario o contraseña incorrectos" });
+    });
 });
 
 module.exports = router;

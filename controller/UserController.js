@@ -1,36 +1,55 @@
-const UserModel = require('../model/UserModel');
+const UserModel = require("../model/UserModel");
 
-exports.list = async () => {
-    return UserModel.find();
-}
-
-exports.create = (body) => {
-    var data = new UserModel({
-        email: body.email,
-        password: body.password
+exports.list = async (filter = {}) => {
+  return new Promise((resolve, reject) => {
+    UserModel.find(filter, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
     });
-    return data.save()
-        .then(saved => { return { status:200, data: saved }})
-        .catch(err => { return { status:500, data: err.message }});
+  });
 };
 
-exports.update = (item) => {
-    return UserModel.findOneAndUpdate({ '_id': item._id }, { $set: item }, { new: true }, function (err, body) {
-        if (err) console.log(err)
-        return body
-    })
+exports.create = (item) => {
+  return new Promise((resolve, reject) => {
+    UserModel.create(item, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
 };
 
-exports.view = function (user_id) {
-    return UserModel.findOne({ '_id': ObjectId(user_id) }, (err, res) => { return res });
+exports.update = (id, item) => {
+  return new Promise((resolve, reject) => {
+    UserModel.updateOne({ _id: ObjectId(id) }, { $set: item }, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
+};
+
+exports.view = (id) => {
+  return new Promise((resolve, reject) => {
+    UserModel.findOne({ _id: ObjectId(id) }, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
+};
+
+exports.delete = (id) => {
+  return new Promise((resolve, reject) => {
+    UserModel.deleteOne({ _id: ObjectId(id) }, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
 };
 
 exports.login = function (email, password) {
-    return UserModel.findOne({ 'email': email, 'password': password }, (err, res) => {
-        return res
+  return new Promise((resolve, reject) => {
+    UserModel.findOne({ email: email, password: password }, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
     });
-};
-
-exports.delete = function (user_id) {
-    return UserModel.deleteOne({ '_id': ObjectId(user_id) }, (err, res) => { return res });
+  });
 };

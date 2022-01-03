@@ -1,17 +1,17 @@
 const express = require("express");
-const VehicleController = require("../controller/VehicleController");
+const CompanyController = require("../controller/CompanyController");
 const Middleware = require("../config/Middleware");
 
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
   console.log(req.body);
-  const get = await VehicleController.list(req.body);
+  const get = await CompanyController.list(req.body);
   res.status(200).send(get);
 });
 
 router.get("/:id", Middleware.checkToken, async (req, res) => {
-  await VehicleController.view(req.params.id)
+  await CompanyController.view(req.params.id)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -21,7 +21,7 @@ router.get("/:id", Middleware.checkToken, async (req, res) => {
 });
 
 router.delete("/:id", Middleware.checkToken, async (req, res) => {
-  await VehicleController.delete(req.params.id)
+  await CompanyController.delete(req.params.id)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -31,7 +31,7 @@ router.delete("/:id", Middleware.checkToken, async (req, res) => {
 });
 
 router.post("/", Middleware.checkToken, async (req, res) => {
-  await VehicleController.create(req.body)
+  await CompanyController.create(req.body)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -41,7 +41,7 @@ router.post("/", Middleware.checkToken, async (req, res) => {
 });
 
 router.put("/:id", Middleware.checkToken, async (req, res) => {
-  await VehicleController.update(req.params.id, req.body)
+  await CompanyController.update(req.params.id, req.body)
     .then((data) => {
       res.status(200).json(data);
     })

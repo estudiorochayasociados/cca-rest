@@ -49,6 +49,11 @@ const Vehicle = new Schema(
     },
     aditionalItems: Array,
     images: Array,
+    company: {
+      type: String,
+      required: "Para crear un vehículo debes asignarlo a una empresa",
+      uppercase: true,
+    },
   },
   {
     versionKey: false,
