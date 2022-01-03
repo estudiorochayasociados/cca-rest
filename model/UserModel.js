@@ -37,26 +37,4 @@ const User = new Schema(
   }
 );
 
-// User.pre("save", async function save(next) {
-//   if (!this.isModified("password")) return next();
-//   try {
-//     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-//     this.password = await bcrypt.hash(this.password, salt);
-//     return next();
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
-
-// User.methods.validatePassword = async function validatePassword(data) {
-//   return bcrypt.compare(data, this.password);
-// };
-
-User.set("toJSON", {
-  transform: (doc, ret) => {
-    delete ret.password;
-    return ret;
-  }
-}),
-
 module.exports = mongoose.model("user", User);
