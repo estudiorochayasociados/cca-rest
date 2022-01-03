@@ -1,9 +1,9 @@
 const express = require("express");
 const VehicleController = require("../controller/VehicleController");
 const Middleware = require("../config/Middleware");
-const router = express.Router();
 const MulterController = require("../utils/Multer");
 const ImagesController = require("../utils/Images");
+const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
   await VehicleController.list(req.body)
