@@ -3,6 +3,7 @@ const UserController = require("../controller/UserController");
 const Middelware = require("../config/Middleware");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const cors = require("cors");
 
 router.get("/", Middelware.checkToken, async (req, res) => {
   await UserController.list(req.body)
@@ -54,7 +55,7 @@ router.delete("/:id", Middelware.checkToken, async (req, res) => {
     });
 });
 
-router.post("/auth", async (req, res) => {
+router.post("/auth", cors("*"), async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
     .then((data) => {
       console.log(data);
