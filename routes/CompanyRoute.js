@@ -5,9 +5,13 @@ const Middleware = require("../config/Middleware");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
-  console.log(req.body);
-  const get = await CompanyController.list(req.body);
-  res.status(200).send(get);
+  await CompanyController.list(req.body)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 });
 
 router.get("/:id", Middleware.checkToken, async (req, res) => {

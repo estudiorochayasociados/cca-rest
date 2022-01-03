@@ -18,12 +18,20 @@ const Vehicle = new Schema(
       required: "Ingresar una dirección",
       uppercase: true,
     },
+    transmission: {
+      type: String,
+      required: "Ingresar la transmisión del vehículo",
+      uppercase: true,
+    },
+    kilometers: {
+      type: Number,
+      required: "Ingresar los kilómetros del vehículo",
+    },
     status: {
       type: String,
       required: "Ingresar un estado",
       uppercase: true,
     },
-
     brand: {
       type: String,
       required: "Ingresar una marca",
@@ -47,11 +55,15 @@ const Vehicle = new Schema(
       required: "Ingresar un tipo de Combustible",
       uppercase: true,
     },
-    aditionalItems: Array,
+    additionalItems: Array,
     images: Array,
     company: {
       type: String,
       required: "Para crear un vehículo debes asignarlo a una empresa",
+    },
+    status_publication: {
+      type: String,
+      required: "Ingresar un estado",
       uppercase: true,
     },
   },

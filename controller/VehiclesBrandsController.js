@@ -3,7 +3,7 @@ var ObjectId = require("mongoose").Types.ObjectId;
 
 exports.list = async (filter = {}) => {
   return new Promise((resolve, reject) => {
-    VehiclesBrands.find(filter,(err, res) => {
+    VehiclesBrands.find(filter, (err, res) => {
       if (err) reject(err.message);
       resolve(res);
     });
