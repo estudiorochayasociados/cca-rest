@@ -6,13 +6,14 @@ const Company = new Schema(
     name: {
       type: String,
       unique: true,
-      required: true,
+      required: "Necesito que pongas un nombre de tu empresa",
     },
     logo: String,
     images: Array,
     description: String,
     addresses: Array,
     phones: Array,
+    email: Array,
   },
   {
     versionKey: false,
@@ -20,4 +21,4 @@ const Company = new Schema(
   }
 );
 
-module.exports = mongoose.model("Company", Company);
+module.exports = mongoose.model("company", Company);

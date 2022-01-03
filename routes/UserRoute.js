@@ -60,7 +60,7 @@ router.post("/auth", async (req, res) => {
       let dataResponse = {
         message: "Autenticación correcta",
         token: jwt.sign({ check: true }, process.env.JWT, {
-          expiresIn: "1h",
+          expiresIn: "10h",
         }),
       };
       res.status(200).json(dataResponse);

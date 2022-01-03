@@ -9,7 +9,7 @@ const VehiclesBrands = new Schema(
       uppercase: true,
       unique: true
     },
-    model: {
+    models: {
       type: Array,
       required: "Ingresar un modelo",
       uppercase: true,
