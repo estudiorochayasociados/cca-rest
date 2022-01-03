@@ -1,4 +1,10 @@
 const UserModel = require("../model/UserModel");
+const bcrypt = require("bcrypt");
+const config = process.env.SALT
+  ? process.env
+  : require("dotenv").config().parsed;
+
+const salt = bcrypt.genSaltSync(parseInt(config.SALT));
 
 exports.list = async (filter = {}) => {
   return new Promise((resolve, reject) => {
@@ -9,7 +15,9 @@ exports.list = async (filter = {}) => {
   });
 };
 
-exports.create = (item) => {
+exports.create = async (item) => {
+  item.password = await bcrypt.hash(item.password, salt);
+  console.log(item.password);
   return new Promise((resolve, reject) => {
     UserModel.create(item, (err, res) => {
       if (err) reject(err.message);
@@ -18,7 +26,8 @@ exports.create = (item) => {
   });
 };
 
-exports.update = (id, item) => {
+exports.update = async (id, item) => {
+  item.password ? bcrypt.hashSync(item.password, salt) : "";
   return new Promise((resolve, reject) => {
     UserModel.updateOne({ _id: ObjectId(id) }, { $set: item }, (err, res) => {
       if (err) reject(err.message);
@@ -45,11 +54,14 @@ exports.delete = (id) => {
   });
 };
 
-exports.login = function (email, password) {
+exports.login = async (email, password) => {
   return new Promise((resolve, reject) => {
-    UserModel.findOne({ email: email, password: password }, (err, res) => {
-      if (err) reject(err.message);
-      resolve(res);
+    UserModel.findOne({ email: email }, async (err, res) => {
+      if (bcrypt.compareSync(password, res.password)) {
+        resolve(res);
+      } else {
+        reject("Contraseña incorrecta");
+      }
     });
   });
 };
