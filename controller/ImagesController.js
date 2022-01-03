@@ -42,3 +42,10 @@ exports.deleteAll = (images) => {
     resolve(1);
   });
 };
+
+exports.delete = (public_id) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(public_id, function (error, result) {});
+    resolve(1);
+  });
+};

@@ -32,6 +32,20 @@ exports.update = (id, item) => {
   });
 };
 
+exports.deleteOneImage = (id, image) => {
+  console.log(id, image);
+  return new Promise((resolve, reject) => {
+    VehicleModel.updateOne(
+      { _id: ObjectId(id) },
+      { $pull: { images: { public_id: image } } },
+      (err, res) => {
+        if (err) reject(err.message);
+        resolve(res);
+      }
+    );
+  });
+};
+
 exports.delete = (id) => {
   return new Promise((resolve, reject) => {
     VehicleModel.deleteOne({ _id: ObjectId(id) }, (err, res) => {

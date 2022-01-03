@@ -37,6 +37,25 @@ router.delete("/:id", Middleware.checkToken, async (req, res) => {
     });
 });
 
+router.delete(
+  "/image/:id/:id_cloudinary",
+  Middleware.checkToken,
+  async (req, res) => {
+    await ImagesController.delete(req.params.id_cloudinary)
+      .then(async (data) => {
+        console.log(data);
+        await VehicleController.deleteOneImage(
+          req.params.id,
+          req.params.id_cloudinary
+        );
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
 router.post(
   "/",
   Middleware.checkToken,
@@ -61,7 +80,7 @@ router.put(
   upload.array("images", 10),
   async (req, res) => {
     if (req.files) {
-      req.body.images = await ImagesController.uploadMany(req.files);
+      req.body.images.concat(await ImagesController.uploadMany(req.files));
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {
