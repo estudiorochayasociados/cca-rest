@@ -57,10 +57,7 @@ const Vehicle = new Schema(
     },
     additionalItems: Array,
     images: Array,
-    company: [
-      { type: Schema.Types.ObjectId, ref: "Company" },
-      { required: "Para crear un vehículo debes asignarlo a una empresa" },
-    ],
+    company: { type: Schema.Types.ObjectId, ref: "Company", required: true },
     status_publication: {
       type: String,
       required: "Ingresar un estado",

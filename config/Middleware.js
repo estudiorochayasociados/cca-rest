@@ -9,12 +9,12 @@ exports.checkToken = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, config.JWT, (err, decoded) => {
       if (err) {
-        res.status(403).send({ message: "Token desactualizado" });
+        res.status(401).send({ message: "Token desactualizado" });
       } else {
         next();
       }
     });
   } else {
-    res.status(403).send({ message: "No tienes autorización" });
+    res.status(401).send({ message: "No tienes autorización" });
   }
 };

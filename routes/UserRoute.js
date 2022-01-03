@@ -67,7 +67,7 @@ router.post("/auth", async (req, res) => {
       res.status(200).json(dataResponse);
     })
     .catch((err) => {
-      res.json({ error: "Usuario o contraseña incorrectos" });
+      res.status(401).json({ error: "Usuario o contraseña incorrectos" });
     });
 });
 
