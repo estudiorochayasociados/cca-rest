@@ -51,7 +51,7 @@ router.put(
     const view = await UserController.view(req.params.id);
     if (req.files.avatar) {
       const avatar = await ImagesController.uploadMany(req.files.avatar);
-      req.body.avatar = avatar;
+      req.body.avatar = avatar[0];
       if (view.avatar) await ImagesController.deleteAll(view.avatar);
     }
     await UserController.update(req.params.id, req.body)
