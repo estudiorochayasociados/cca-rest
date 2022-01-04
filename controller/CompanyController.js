@@ -41,6 +41,20 @@ exports.delete = (id) => {
   });
 };
 
+exports.deleteOneImage = (id, image) => {
+  console.log(id, image);
+  return new Promise((resolve, reject) => {
+    CompanyModel.updateOne(
+      { _id: ObjectId(id) },
+      { $pull: { images: { public_id: image } } },
+      (err, res) => {
+        if (err) reject(err.message);
+        resolve(res);
+      }
+    );
+  });
+};
+
 exports.view = (id) => {
   return new Promise((resolve, reject) => {
     CompanyModel.findOne({ _id: ObjectId(id) }, (err, res) => {

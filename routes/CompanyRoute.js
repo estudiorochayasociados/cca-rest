@@ -1,5 +1,7 @@
 const express = require("express");
 const CompanyController = require("../controller/CompanyController");
+const MulterController = require("../utils/Multer");
+const ImagesController = require("../utils/Images");
 const Middleware = require("../config/Middleware");
 
 const router = express.Router();
@@ -25,8 +27,11 @@ router.get("/:id", Middleware.checkToken, async (req, res) => {
 });
 
 router.delete("/:id", Middleware.checkToken, async (req, res) => {
+  const view = await CompanyController.view(req.params.id);
   await CompanyController.delete(req.params.id)
-    .then((data) => {
+    .then(async (data) => {
+      await ImagesController.deleteAll(view.images);
+      await ImagesController.deleteAll(view.logo);
       res.status(200).json(data);
     })
     .catch((err) => {
@@ -34,24 +39,74 @@ router.delete("/:id", Middleware.checkToken, async (req, res) => {
     });
 });
 
-router.post("/", Middleware.checkToken, async (req, res) => {
-  await CompanyController.create(req.body)
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
-});
+router.delete(
+  "/image/:id/:id_cloudinary",
+  Middleware.checkToken,
+  async (req, res) => {
+    await ImagesController.delete(req.params.id_cloudinary)
+      .then(async (data) => {
+        console.log(data);
+        await CompanyController.deleteOneImage(
+          req.params.id,
+          req.params.id_cloudinary
+        );
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  }
+);
 
-router.put("/:id", Middleware.checkToken, async (req, res) => {
-  await CompanyController.update(req.params.id, req.body)
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
-});
+router.post(
+  "/",
+  Middleware.checkToken,
+  MulterController.array("images", 10),
+  MulterController.array("logo", 1),
+  async (req, res) => {
+    if (req.files) {
+      req.body.images = await ImagesController.uploadMany(req.files);
+    }
+    if (req.logo) {
+      req.body.logo = await ImagesController.uploadMany(req.logo);
+    }
+    await CompanyController.create(req.body)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+router.put(
+  "/:id",
+  Middleware.checkToken,
+  Middleware.checkToken,
+  MulterController.array("images", 10),
+  MulterController.array("logo", 1),
+  async (req, res) => {
+    const company = await CompanyController.view(req.params.id);
+
+    if (req.files) {
+      company.images.push(await ImagesController.uploadMany(req.files));
+      req.body.images = company.images;
+    }
+
+    if (req.logo) {
+      await CompanyController.deleteOneImage(company.logo.public_id);
+      req.body.logo = await ImagesController.uploadMany(req.logo);
+    }
+
+    await CompanyController.update(req.params.id, req.body)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  }
+);
 
 module.exports = router;

@@ -1,10 +1,8 @@
 const VehicleModel = require("../model/VehicleModel");
 var ObjectId = require("mongoose").Types.ObjectId;
 
-exports.list = async (filter = {}) => {
+exports.list = async (filter = {}, limit, page) => {
   return new Promise((resolve, reject) => {
-    const limit = parseInt(req.query.limit, 10) || 10;
-    const page = parseInt(req.query.page, 10) || 1;
     VehicleModel.paginate(filter, { limit, page }, (err, res) => {
       if (err) reject(err.message);
       resolve(res);

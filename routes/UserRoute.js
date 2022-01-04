@@ -55,7 +55,7 @@ router.delete("/:id", Middelware.checkToken, async (req, res) => {
     });
 });
 
-router.post("/auth", cors("*"), async (req, res) => {
+router.post("/auth", async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
     .then((data) => {
       console.log(data);

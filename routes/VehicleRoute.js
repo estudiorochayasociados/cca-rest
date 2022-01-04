@@ -6,11 +6,14 @@ const ImagesController = require("../utils/Images");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
-  await VehicleController.list(req.body)
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const page = parseInt(req.query.page, 10) || 1;
+  await VehicleController.list(req.body, limit, page)
     .then((data) => {
       res.status(200).json(data);
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).json({ error: err });
     });
 });
@@ -79,8 +82,10 @@ router.put(
   Middleware.checkToken,
   MulterController.array("images", 10),
   async (req, res) => {
+    const vehicle = await VehicleController.view(req.params.id);
     if (req.files) {
-      req.body.images.concat(await ImagesController.uploadMany(req.files));
+      vehicle.images.push(await ImagesController.uploadMany(req.files));
+      req.body.images = vehicle.images;
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {
