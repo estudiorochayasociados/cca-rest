@@ -5,6 +5,7 @@ const config = process.env.SALT
   : require("dotenv").config().parsed;
 
 const salt = bcrypt.genSaltSync(parseInt(config.SALT));
+var ObjectId = require("mongoose").Types.ObjectId;
 
 exports.list = async (filter = {}) => {
   return new Promise((resolve, reject) => {
@@ -51,6 +52,20 @@ exports.delete = (id) => {
       if (err) reject(err.message);
       resolve(res);
     });
+  });
+};
+
+exports.deleteOneImage = (id, image) => {
+  console.log(id, image);
+  return new Promise((resolve, reject) => {
+    UserModel.updateOne(
+      { _id: ObjectId(id) },
+      { $pull: { avatar: { public_id: image } } },
+      (err, res) => {
+        if (err) reject(err.message);
+        resolve(res);
+      }
+    );
   });
 };
 

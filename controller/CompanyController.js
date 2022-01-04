@@ -46,7 +46,7 @@ exports.deleteOneImage = (id, image) => {
   return new Promise((resolve, reject) => {
     CompanyModel.updateOne(
       { _id: ObjectId(id) },
-      { $pull: { images: { public_id: image } } },
+      { $pull: { images: { public_id: image }, logo: { public_id: image } } },
       (err, res) => {
         if (err) reject(err.message);
         resolve(res);
