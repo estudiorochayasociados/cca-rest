@@ -61,11 +61,16 @@ router.delete(
 router.post(
   "/",
   Middleware.checkToken,
-  MulterController.fields([{name:"images", maxCount: 10}, {name:"logo", maxCount: 1}]),
+  MulterController.fields([
+    { name: "images", maxCount: 10 },
+    { name: "logo", maxCount: 1 },
+  ]),
   async (req, res) => {
     if (req.files) {
-      if(req.files.images) req.body.images = await ImagesController.uploadMany(req.files.images);
-      if(req.files.logo) req.body.logo = await ImagesController.uploadMany(req.files.logo);
+      if (req.files.images)
+        req.body.images = await ImagesController.uploadMany(req.files.images);
+      if (req.files.logo)
+        req.body.logo = await ImagesController.uploadMany(req.files.logo);
     }
     await CompanyController.create(req.body)
       .then((data) => {
@@ -81,19 +86,20 @@ router.put(
   "/:id",
   Middleware.checkToken,
   Middleware.checkToken,
-  MulterController.array("images", 10),
-  // MulterController.array("logo", 1),
+  MulterController.fields([
+    { name: "images", maxCount: 10 },
+    { name: "logo", maxCount: 1 },
+  ]),
   async (req, res) => {
     const company = await CompanyController.view(req.params.id);
 
     if (req.files) {
-      company.images.push(await ImagesController.uploadMany(req.files));
-      req.body.images = company.images;
-    }
+      if (req.files.images)
 
-    if (req.logo) {
-      await CompanyController.deleteOneImage(company.logo.public_id);
-      req.body.logo = await ImagesController.uploadMany(req.logo);
+      req.body.images = [...company.images,...await ImagesController.uploadMany(req.files.images)];
+
+      if (req.files.logo)
+        req.body.logo = await ImagesController.uploadMany(req.files.logo);
     }
 
     await CompanyController.update(req.params.id, req.body)

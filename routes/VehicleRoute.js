@@ -62,7 +62,7 @@ router.delete(
 router.post(
   "/",
   Middleware.checkToken,
-  MulterController.array("images", 10),
+  MulterController.fields([{name:"images", maxCount: 10}]),
   async (req, res) => {
     if (req.files) {
       req.body.images = await ImagesController.uploadMany(req.files);
@@ -80,12 +80,11 @@ router.post(
 router.put(
   "/:id",
   Middleware.checkToken,
-  MulterController.array("images", 10),
+  MulterController.fields([{name:"images", maxCount: 10}]),
   async (req, res) => {
     const vehicle = await VehicleController.view(req.params.id);
     if (req.files) {
-      vehicle.images.push(await ImagesController.uploadMany(req.files));
-      req.body.images = vehicle.images;
+      req.body.images = [...vehicle.images,...await ImagesController.uploadMany(req.files.images)];
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {
