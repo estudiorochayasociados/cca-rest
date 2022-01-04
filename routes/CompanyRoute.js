@@ -85,7 +85,6 @@ router.post(
 router.put(
   "/:id",
   Middleware.checkToken,
-  Middleware.checkToken,
   MulterController.fields([
     { name: "images", maxCount: 10 },
     { name: "logo", maxCount: 1 },
