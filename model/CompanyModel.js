@@ -8,7 +8,7 @@ const Company = new Schema(
       unique: true,
       required: "Necesito que pongas un nombre de tu empresa",
     },
-    logo: String,
+    logo: Array,
     images: Array,
     description: String,
     addresses: Array,

@@ -61,14 +61,11 @@ router.delete(
 router.post(
   "/",
   Middleware.checkToken,
-  MulterController.array("images", 10),
-  MulterController.array("logo", 1),
+  MulterController.fields([{name:"images", maxCount: 10}, {name:"logo", maxCount: 1}]),
   async (req, res) => {
     if (req.files) {
-      req.body.images = await ImagesController.uploadMany(req.files);
-    }
-    if (req.logo) {
-      req.body.logo = await ImagesController.uploadMany(req.logo);
+      if(req.files.images) req.body.images = await ImagesController.uploadMany(req.files.images);
+      if(req.files.logo) req.body.logo = await ImagesController.uploadMany(req.files.logo);
     }
     await CompanyController.create(req.body)
       .then((data) => {
@@ -85,7 +82,7 @@ router.put(
   Middleware.checkToken,
   Middleware.checkToken,
   MulterController.array("images", 10),
-  MulterController.array("logo", 1),
+  // MulterController.array("logo", 1),
   async (req, res) => {
     const company = await CompanyController.view(req.params.id);
 

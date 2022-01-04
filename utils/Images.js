@@ -19,15 +19,16 @@ exports.uploads = (file) => {
 
 exports.uploadMany = (files_input) => {
   return new Promise(async (resolve, reject) => {
-    const uploader = async (path) => await this.uploads(path, "vehicles");
+    // const uploader = async (path) => await this.uploads(path);
     const urls = [];
     const files = files_input;
-
+    console.log(files);
     for (const file of files) {
-      const { path } = file;
-      const newPath = await uploader(path);
+      console.log(file.fieldname);
+      const newPath = await this.uploads(file.path);
       urls.push(newPath);
-      fs.unlinkSync(path);
+      console.log(file.path);
+      fs.unlinkSync(file.path);
     }
 
     resolve(urls);
