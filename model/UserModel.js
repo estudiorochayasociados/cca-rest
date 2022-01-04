@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const { Schema } = mongoose;
- 
 
 const User = new Schema(
   {
@@ -24,7 +23,7 @@ const User = new Schema(
       type: String,
       required: true,
     },
-    company: { type: Schema.Types.ObjectId, ref: "Company"},
+    company: { type: Schema.Types.ObjectId, ref: "Company" },
     role: {
       type: String,
       required: true,

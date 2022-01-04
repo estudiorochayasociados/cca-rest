@@ -70,7 +70,7 @@ router.post(
       if (req.files.images)
         req.body.images = await ImagesController.uploadMany(req.files.images);
       if (req.files.logo)
-        req.body.logo = await ImagesController.uploadMany(req.files.logo);
+        req.body.logo = await ImagesController.uploadMany(req.files.logo)[0];
     }
     await CompanyController.create(req.body)
       .then((data) => {
@@ -100,7 +100,7 @@ router.put(
         ];
 
       if (req.files.logo)
-        req.body.logo = await ImagesController.uploadMany(req.files.logo);
+        req.body.logo = await ImagesController.uploadMany(req.files.logo)[0];
     }
 
     await CompanyController.update(req.params.id, req.body)
