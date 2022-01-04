@@ -31,7 +31,7 @@ router.delete("/:id", Middleware.checkToken, async (req, res) => {
   await CompanyController.delete(req.params.id)
     .then(async (data) => {
       await ImagesController.deleteAll(view.images);
-      await ImagesController.deleteAll(view.logo);
+      await ImagesController.deleteAll([view.logo]);
       res.status(200).json(data);
     })
     .catch((err) => {
@@ -70,7 +70,7 @@ router.post(
       if (req.files.images)
         req.body.images = await ImagesController.uploadMany(req.files.images);
       if (req.files.logo)
-        req.body.logo = await ImagesController.uploadMany(req.files.logo)[0];
+        req.body.logo = (await ImagesController.uploadMany(req.files.logo))[0];
     }
     await CompanyController.create(req.body)
       .then((data) => {
@@ -100,7 +100,7 @@ router.put(
         ];
 
       if (req.files.logo)
-        req.body.logo = await ImagesController.uploadMany(req.files.logo)[0];
+        req.body.logo = (await ImagesController.uploadMany(req.files.logo))[0];
     }
 
     await CompanyController.update(req.params.id, req.body)
