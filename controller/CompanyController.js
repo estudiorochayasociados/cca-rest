@@ -19,7 +19,7 @@ exports.create = (item) => {
   });
 };
 
-exports.update = (id, item) => {
+exports.update = (id, item) => { 
   return new Promise((resolve, reject) => {
     CompanyModel.updateOne(
       { _id: ObjectId(id) },
@@ -42,16 +42,29 @@ exports.delete = (id) => {
 };
 
 exports.deleteOneImage = (id, image) => {
-  console.log(id, image);
-  return new Promise((resolve, reject) => {
-    CompanyModel.updateOne(
-      { _id: ObjectId(id) },
-      { $pull: { images: { public_id: image } } },
+  return new Promise(async (resolve, reject) => {
+    await CompanyModel.findOneAndUpdate(
+      { _id: ObjectId(id), "logo.public_id": image },
+      {
+        logo: {},
+      },
       (err, res) => {
         if (err) reject(err.message);
-        resolve(res);
       }
     );
+    await CompanyModel.findOneAndUpdate(
+      { _id: ObjectId(id) },
+      {
+        $pull: { images: { public_id: image } },
+      },
+      (err, res) => {
+        if (err) reject(err.message);
+      }
+    );
+
+    await CompanyModel.find({ _id: ObjectId(id) }, (err, res) => {
+      resolve(res);
+    });
   });
 };
 

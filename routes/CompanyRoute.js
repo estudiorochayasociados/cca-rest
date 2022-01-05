@@ -46,11 +46,11 @@ router.delete(
     await ImagesController.delete(req.params.id_cloudinary)
       .then(async (data) => {
         console.log(data);
-        await CompanyController.deleteOneImage(
+        const resFinal = await CompanyController.deleteOneImage(
           req.params.id,
           req.params.id_cloudinary
         );
-        res.status(200).json(data);
+        res.status(200).json(resFinal);
       })
       .catch((err) => {
         res.status(500).json({ error: err });
@@ -90,6 +90,9 @@ router.put(
     { name: "logo", maxCount: 1 },
   ]),
   async (req, res) => {
+
+    console.log(req.body);
+
     const company = await CompanyController.view(req.params.id);
 
     if (req.files) {
