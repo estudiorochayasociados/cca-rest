@@ -90,9 +90,6 @@ router.put(
     { name: "logo", maxCount: 1 },
   ]),
   async (req, res) => {
-
-    console.log(req.body);
-
     const company = await CompanyController.view(req.params.id);
 
     if (req.files) {

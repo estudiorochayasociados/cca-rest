@@ -19,12 +19,16 @@ exports.create = (item) => {
   });
 };
 
-exports.update = (id, item) => { 
+exports.update = (id, item) => {
+  item = JSON.parse(JSON.stringify(item));
+  if(item.hasOwnProperty("phones")) item.phones = this.validateEmptyArray(item.phones);
+  if(item.hasOwnProperty("email")) item.email = this.validateEmptyArray(item.email);
+  if(item.hasOwnProperty("addresses")) item.addresses = this.validateEmptyArray(item.addresses);
+  
   return new Promise((resolve, reject) => {
     CompanyModel.updateOne(
       { _id: ObjectId(id) },
-      // { $set: item, $unset: { phones: "" } },
-      {  $set: { phones: [] } },
+      { $set: item },
       (err, res) => {
         if (err) reject(err.message);
         resolve(res);
@@ -76,4 +80,11 @@ exports.view = (id) => {
       resolve(res);
     });
   });
+};
+
+exports.validateEmptyArray = (item) => {
+  item = typeof item === "string" ? [item] : Object.values(item);
+  item = item.filter((n) => n);
+  console.log(item);
+  return item;
 };
