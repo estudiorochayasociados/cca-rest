@@ -20,9 +20,9 @@ const Company = new Schema(
     logo: Map,
     images: Array,
     description: String,
-    addresses:Array,
-    phones:Array,
-    email:Array,
+    addresses: Array,
+    phones: Array,
+    email: Array,
   },
   {
     versionKey: false,

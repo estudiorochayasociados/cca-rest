@@ -65,7 +65,7 @@ router.post(
   MulterController.fields([{name:"images", maxCount: 10}]),
   async (req, res) => {
     if (req.files) {
-      req.body.images = await ImagesController.uploadMany(req.files,images);
+      req.body.images = await ImagesController.uploadMany(req.files.images);
     }
     await VehicleController.create(req.body)
       .then((data) => {
