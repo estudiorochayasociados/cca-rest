@@ -23,7 +23,8 @@ exports.update = (id, item) => {
   return new Promise((resolve, reject) => {
     CompanyModel.updateOne(
       { _id: ObjectId(id) },
-      { $set: item },
+      // { $set: item, $unset: { phones: "" } },
+      {  $set: { phones: [] } },
       (err, res) => {
         if (err) reject(err.message);
         resolve(res);
