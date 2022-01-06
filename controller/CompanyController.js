@@ -11,6 +11,11 @@ exports.list = async (filter = {}) => {
 };
 
 exports.create = (item) => {
+  item = JSON.parse(JSON.stringify(item));
+  if(item.hasOwnProperty("phones")) item.phones = this.validateEmptyArray(item.phones);
+  if(item.hasOwnProperty("email")) item.email = this.validateEmptyArray(item.email);
+  if(item.hasOwnProperty("addresses")) item.addresses = this.validateEmptyArray(item.addresses);
+  
   return new Promise((resolve, reject) => {
     CompanyModel.create(item, (err, res) => {
       if (err) reject(err.message);
