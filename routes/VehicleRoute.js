@@ -64,7 +64,7 @@ router.post(
   Middleware.checkToken,
   MulterController.fields([{name:"images", maxCount: 10}]),
   async (req, res) => {
-    if (req.files) {
+    if (req.files.images) {
       req.body.images = await ImagesController.uploadMany(req.files.images);
     }
     await VehicleController.create(req.body)
@@ -83,7 +83,7 @@ router.put(
   MulterController.fields([{name:"images", maxCount: 10}]),
   async (req, res) => {
     const vehicle = await VehicleController.view(req.params.id);
-    if (req.files) {
+    if (req.files.images) {
       req.body.images = [...vehicle.images,...await ImagesController.uploadMany(req.files.images)];
     }
     await VehicleController.update(req.params.id, req.body)
