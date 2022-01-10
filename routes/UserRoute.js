@@ -98,14 +98,18 @@ router.delete(
 
 router.post("/auth", async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
-    .then((data) => {
-      console.log(data);
+    .then(async (data) => {
+      // console.log(data);
       let dataResponse = {
         message: "Autenticación correcta",
         token: jwt.sign({ check: true }, process.env.JWT, {
           expiresIn: "10h",
         }),
+        name: data.name,
+        surname: data.surname,
+        role: data.role,
       };
+      console.log("DATA RESPONSE =>", dataResponse);
       res.status(200).json(dataResponse);
     })
     .catch((err) => {
