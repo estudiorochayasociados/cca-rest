@@ -6,9 +6,14 @@ const ImagesController = require("../utils/Images");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
+  // console.log(req)
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
-  await VehicleController.list(req.body, limit, page)
+  console.log("QUERY => ", req.query)
+  console.log("FILTER => ", JSON.parse(req.query.filter))
+  console.log("LIMIT => ", limit)
+  console.log("PAGE => ", page)
+  await VehicleController.list(JSON.parse(req.query.filter), limit, page)
     .then((data) => {
       res.status(200).json(data);
     })

@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
-  await UserController.list(req.body)
+  await UserController.list(req.query)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -65,7 +65,11 @@ router.put(
 );
 
 router.delete("/:id", Middleware.checkToken, async (req, res) => {
+  console.log("PARAMS =>", req.params)
+
   const view = await UserController.view(req.params.id);
+
+  console.log("View =>", view);
 
   await UserController.delete(req.params.id)
     .then(async (data) => {
@@ -108,8 +112,8 @@ router.post("/auth", async (req, res) => {
         name: data.name,
         surname: data.surname,
         role: data.role,
+        company: data.company
       };
-      console.log("DATA RESPONSE =>", dataResponse);
       res.status(200).json(dataResponse);
     })
     .catch((err) => {
