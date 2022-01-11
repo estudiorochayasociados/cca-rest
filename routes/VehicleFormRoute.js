@@ -4,7 +4,7 @@ const Middleware = require("../config/Middleware");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", Middleware.checkToken, async (req, res) => {
   await VehicleForm.list(req.body)
     .then((data) => {
       res.status(200).json(data);
@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", Middleware.checkToken, async (req, res) => {
   await VehicleForm.view(req.params.id)
     .then((data) => {
       res.status(200).json(data);
