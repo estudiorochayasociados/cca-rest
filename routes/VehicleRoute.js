@@ -6,14 +6,19 @@ const ImagesController = require("../utils/Images");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
-  // console.log(req)
+  var filter = JSON.parse(req.query.filter);
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
-  console.log("QUERY => ", req.query)
-  console.log("FILTER => ", JSON.parse(req.query.filter))
-  console.log("LIMIT => ", limit)
-  console.log("PAGE => ", page)
-  await VehicleController.list(JSON.parse(req.query.filter), limit, page)
+
+  if (filter.minPrice || filter.maxPrice) {
+    filter.regularPrice = { "$gte": filter.minPrice || 0 , "$lte": filter.maxPrice || 999999999999999 }
+  }
+  delete filter.minPrice;
+  delete filter.maxPrice;
+
+  console.log(filter);
+
+  await VehicleController.list(filter, limit, page)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -67,7 +72,7 @@ router.delete(
 router.post(
   "/",
   Middleware.checkToken,
-  MulterController.fields([{name:"images", maxCount: 10}]),
+  MulterController.fields([{ name: "images", maxCount: 10 }]),
   async (req, res) => {
     if (req.files.images) {
       req.body.images = await ImagesController.uploadMany(req.files.images);
@@ -85,11 +90,11 @@ router.post(
 router.put(
   "/:id",
   Middleware.checkToken,
-  MulterController.fields([{name:"images", maxCount: 10}]),
+  MulterController.fields([{ name: "images", maxCount: 10 }]),
   async (req, res) => {
     const vehicle = await VehicleController.view(req.params.id);
     if (req.files.images) {
-      req.body.images = [...vehicle.images,...await ImagesController.uploadMany(req.files.images)];
+      req.body.images = [...vehicle.images, ...await ImagesController.uploadMany(req.files.images)];
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {

@@ -3,13 +3,13 @@ const { Schema } = mongoose;
 
 const VehiclesBrands = new Schema(
   {
-    brand: {
+    name: {
       type: String,
       required: "Ingresar una marca",
       uppercase: true,
       unique: true
     },
-    models: {
+    options: {
       type: Array,
       required: "Ingresar un modelo",
       uppercase: true,

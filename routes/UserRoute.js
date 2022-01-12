@@ -112,7 +112,8 @@ router.post("/auth", async (req, res) => {
         name: data.name,
         surname: data.surname,
         role: data.role,
-        company: data.company
+        company: data.company,
+        email: data.email
       };
       res.status(200).json(dataResponse);
     })
