@@ -9,10 +9,9 @@ router.get("/", Middleware.checkToken, async (req, res) => {
   var filter = JSON.parse(req.query.filter);
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
+  
+  filter.regularPrice = { "$gte": filter.minPrice || 0, "$lte": filter.maxPrice || 999999999999999 }
 
-  if (filter.minPrice || filter.maxPrice) {
-    filter.regularPrice = { "$gte": filter.minPrice || 0 , "$lte": filter.maxPrice || 999999999999999 }
-  }
   delete filter.minPrice;
   delete filter.maxPrice;
 

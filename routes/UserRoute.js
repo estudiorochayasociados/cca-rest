@@ -30,9 +30,11 @@ router.post(
   "/",
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
   async (req, res) => {
+    console.log(req.files)
     if (req.files) {
-      req.body.avatar = await ImagesController.uploadMany(req.files.avatar)[0];
+      req.body.avatar = (await ImagesController.uploadMany(req.files.avatar))[0];
     }
+    console.log("AVATAR =>", req.body.avatar)
     await UserController.create(req.body)
       .then((data) => {
         res.status(200).json(data);
