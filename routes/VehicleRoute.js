@@ -9,20 +9,17 @@ router.get("/", Middleware.checkToken, async (req, res) => {
   var filter = JSON.parse(req.query.filter);
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
-  
+
   filter.regularPrice = { "$gte": filter.minPrice || 0, "$lte": filter.maxPrice || 999999999999999 }
 
   delete filter.minPrice;
   delete filter.maxPrice;
-
-  console.log(filter);
 
   await VehicleController.list(filter, limit, page)
     .then((data) => {
       res.status(200).json(data);
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({ error: err });
     });
 });
@@ -55,7 +52,6 @@ router.delete(
   async (req, res) => {
     await ImagesController.delete(req.params.id_cloudinary)
       .then(async (data) => {
-        console.log(data);
         await VehicleController.deleteOneImage(
           req.params.id,
           req.params.id_cloudinary
@@ -73,8 +69,10 @@ router.post(
   Middleware.checkToken,
   MulterController.fields([{ name: "images", maxCount: 10 }]),
   async (req, res) => {
-    if (req.files.images) {
-      req.body.images = await ImagesController.uploadMany(req.files.images);
+    if (req.files) {
+      if (req.files.images) {
+        req.body.images = await ImagesController.uploadMany(req.files.images);
+      }
     }
     await VehicleController.create(req.body)
       .then((data) => {
@@ -92,8 +90,10 @@ router.put(
   MulterController.fields([{ name: "images", maxCount: 10 }]),
   async (req, res) => {
     const vehicle = await VehicleController.view(req.params.id);
-    if (req.files.images) {
-      req.body.images = [...vehicle.images, ...await ImagesController.uploadMany(req.files.images)];
+    if (req.files) {
+      if (req.files.images) {
+        req.body.images = [...vehicle.images, ...await ImagesController.uploadMany(req.files.images)];
+      }
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {

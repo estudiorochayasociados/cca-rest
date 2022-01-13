@@ -18,7 +18,6 @@ exports.list = async (filter = {}) => {
 
 exports.create = async (item) => {
   item.password = await bcrypt.hash(item.password, salt);
-  console.log(item.password);
   return new Promise((resolve, reject) => {
     UserModel.create(item, (err, res) => {
       if (err) reject(err.message);

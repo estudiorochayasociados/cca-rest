@@ -30,11 +30,11 @@ router.post(
   "/",
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
   async (req, res) => {
-    console.log(req.files)
     if (req.files) {
-      req.body.avatar = (await ImagesController.uploadMany(req.files.avatar))[0];
+      if (req.files.avatar) {
+        req.body.avatar = (await ImagesController.uploadMany(req.files.avatar))[0];
+      }
     }
-    console.log("AVATAR =>", req.body.avatar)
     await UserController.create(req.body)
       .then((data) => {
         res.status(200).json(data);
@@ -51,10 +51,12 @@ router.put(
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
   async (req, res) => {
     const view = await UserController.view(req.params.id);
-    if (req.files.avatar) {
-      const avatar = await ImagesController.uploadMany(req.files.avatar);
-      req.body.avatar = avatar[0];
-      if (view.avatar) await ImagesController.deleteAll(view.avatar);
+    if (req.files) {
+      if (req.files.avatar) {
+        const avatar = await ImagesController.uploadMany(req.files.avatar);
+        req.body.avatar = avatar[0];
+        if (view.avatar) await ImagesController.deleteAll(view.avatar);
+      }
     }
     await UserController.update(req.params.id, req.body)
       .then((data) => {
@@ -67,8 +69,7 @@ router.put(
 );
 
 router.delete("/:id", Middleware.checkToken, async (req, res) => {
-  console.log("PARAMS =>", req.params)
-
+  console.log("ID =>",req.params.id)
   const view = await UserController.view(req.params.id);
 
   console.log("View =>", view);
@@ -103,6 +104,7 @@ router.delete(
 );
 
 router.post("/auth", async (req, res) => {
+  console.log("BODY AUTH =>",req.body)
   await UserController.login(req.body.email, req.body.password)
     .then(async (data) => {
       // console.log(data);
@@ -115,7 +117,8 @@ router.post("/auth", async (req, res) => {
         surname: data.surname,
         role: data.role,
         company: data.company,
-        email: data.email
+        email: data.email,
+        id: data._id
       };
       res.status(200).json(dataResponse);
     })

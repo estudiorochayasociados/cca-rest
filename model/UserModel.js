@@ -24,6 +24,11 @@ const User = new Schema(
       required: true,
     },
     company: { type: Schema.Types.ObjectId, ref: "Company" },
+    status: {
+      type: String,
+      required: true,
+      default: true,
+    },
     role: {
       type: String,
       required: true,
