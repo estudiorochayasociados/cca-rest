@@ -71,6 +71,12 @@ exports.deleteOneImage = (id, image) => {
 exports.login = async (email, password) => {
   return new Promise((resolve, reject) => {
     UserModel.findOne({ email: email }, async (err, res) => {
+      if (err) {
+        reject("Mail o contraseña incorrecto");
+      }
+      if (!res) {
+        reject("El mail ingresado no se encuentra registrado");
+      }
       if (bcrypt.compareSync(password, res.password)) {
         resolve(res);
       } else {

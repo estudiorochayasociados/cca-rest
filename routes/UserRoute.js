@@ -104,7 +104,6 @@ router.delete(
 );
 
 router.post("/auth", async (req, res) => {
-  console.log("BODY AUTH =>",req.body)
   await UserController.login(req.body.email, req.body.password)
     .then(async (data) => {
       // console.log(data);

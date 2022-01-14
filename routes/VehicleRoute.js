@@ -74,6 +74,15 @@ router.post(
         req.body.images = await ImagesController.uploadMany(req.files.images);
       }
     }
+    if (req.body.additionalItems) {
+      const items = req.body.additionalItems;
+      req.body.additionalItems = [];
+      items.forEach((element) => {
+        req.body.additionalItems.push(JSON.parse(element));
+      });
+    } else {
+      req.body.additionalItems = [];
+    }
     await VehicleController.create(req.body)
       .then((data) => {
         res.status(200).json(data);
@@ -94,6 +103,15 @@ router.put(
       if (req.files.images) {
         req.body.images = [...vehicle.images, ...await ImagesController.uploadMany(req.files.images)];
       }
+    }
+    if (req.body.additionalItems) {
+      const items = req.body.additionalItems;
+      req.body.additionalItems = [];
+      items.forEach((element) => {
+        req.body.additionalItems.push(JSON.parse(element));
+      });
+    } else {
+      req.body.additionalItems = [];
     }
     await VehicleController.update(req.params.id, req.body)
       .then((data) => {
