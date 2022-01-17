@@ -63,15 +63,15 @@ router.post(
   Middleware.checkToken,
   MulterController.fields([
     { name: "images", maxCount: 10 },
-    { name: "logo", maxCount: 1 },
   ]),
   async (req, res) => {
     if (req.files) {
       if (req.files.images)
         req.body.images = await ImagesController.uploadMany(req.files.images);
-      if (req.files.logo)
-        req.body.logo = (await ImagesController.uploadMany(req.files.logo))[0];
     }
+
+    if (req.body.logo)
+      req.body.logo = JSON.parse(req.body.logo);
     await CompanyController.create(req.body)
       .then((data) => {
         res.status(200).json(data);
@@ -87,21 +87,19 @@ router.put(
   Middleware.checkToken,
   MulterController.fields([
     { name: "images", maxCount: 10 },
-    { name: "logo", maxCount: 1 },
   ]),
   async (req, res) => {
     const company = await CompanyController.view(req.params.id);
-
     if (req.files) {
       if (req.files.images)
         req.body.images = [
           ...company.images,
           ...(await ImagesController.uploadMany(req.files.images)),
         ];
-
-      if (req.files.logo)
-        req.body.logo = (await ImagesController.uploadMany(req.files.logo))[0];
     }
+
+    if (req.body.logo)
+      req.body.logo = JSON.parse(req.body.logo);
 
     await CompanyController.update(req.params.id, req.body)
       .then((data) => {

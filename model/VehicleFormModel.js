@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const VehiclesBrands = new Schema(
+const VehicleForm = new Schema(
   {
     name: {
       type: String,
-      required: "Ingresar una marca",
-      uppercase: true,
+      required: "Ingresar una nombre",
       unique: true
     },
     options: {
       type: Array,
-      required: "Ingresar un modelo",
+      required: "Ingresar las opciones",
       uppercase: true,
     },
   },
@@ -21,4 +20,4 @@ const VehiclesBrands = new Schema(
   }
 );
 
-module.exports = mongoose.model("vehicles_brands", VehiclesBrands);
+module.exports = mongoose.model("vehicles_forms", VehicleForm);

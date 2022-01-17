@@ -25,3 +25,5 @@ app.use("/vehicle", require("./routes/VehicleRoute"));
 app.use("/user", require("./routes/UserRoute"));
 app.use("/company", require("./routes/CompanyRoute"));
 app.use("/brands", require("./routes/VehiclesBrandsRoute"));
+app.use("/form", require("./routes/VehicleFormRoute"));
+app.use("/service", require("./routes/ServiceRoute"));

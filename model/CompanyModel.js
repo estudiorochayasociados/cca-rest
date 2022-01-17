@@ -23,6 +23,7 @@ const Company = new Schema(
     addresses: Array,
     phones: Array,
     email: Array,
+    account: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {
     versionKey: false,

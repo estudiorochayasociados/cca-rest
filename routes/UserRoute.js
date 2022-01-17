@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.get("/", Middleware.checkToken, async (req, res) => {
-  await UserController.list(req.body)
+  await UserController.list(req.query)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -31,7 +31,9 @@ router.post(
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
   async (req, res) => {
     if (req.files) {
-      req.body.avatar = await ImagesController.uploadMany(req.files.avatar)[0];
+      if (req.files.avatar) {
+        req.body.avatar = (await ImagesController.uploadMany(req.files.avatar))[0];
+      }
     }
     await UserController.create(req.body)
       .then((data) => {
@@ -49,10 +51,12 @@ router.put(
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
   async (req, res) => {
     const view = await UserController.view(req.params.id);
-    if (req.files.avatar) {
-      const avatar = await ImagesController.uploadMany(req.files.avatar);
-      req.body.avatar = avatar[0];
-      if (view.avatar) await ImagesController.deleteAll(view.avatar);
+    if (req.files) {
+      if (req.files.avatar) {
+        const avatar = await ImagesController.uploadMany(req.files.avatar);
+        req.body.avatar = avatar[0];
+        if (view.avatar) await ImagesController.deleteAll(view.avatar);
+      }
     }
     await UserController.update(req.params.id, req.body)
       .then((data) => {
@@ -65,7 +69,10 @@ router.put(
 );
 
 router.delete("/:id", Middleware.checkToken, async (req, res) => {
+  console.log("ID =>",req.params.id)
   const view = await UserController.view(req.params.id);
+
+  console.log("View =>", view);
 
   await UserController.delete(req.params.id)
     .then(async (data) => {
@@ -98,13 +105,19 @@ router.delete(
 
 router.post("/auth", async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
-    .then((data) => {
-      console.log(data);
+    .then(async (data) => {
+      // console.log(data);
       let dataResponse = {
         message: "Autenticación correcta",
         token: jwt.sign({ check: true }, process.env.JWT, {
           expiresIn: "10h",
         }),
+        name: data.name,
+        surname: data.surname,
+        role: data.role,
+        company: data.company,
+        email: data.email,
+        id: data._id
       };
       res.status(200).json(dataResponse);
     })
