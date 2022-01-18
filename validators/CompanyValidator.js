@@ -1,20 +1,19 @@
 const { check, validationResult } = require("express-validator");
 
 exports.validateRequest = [
-  check([
-    "name",
-    "logo",
-    "images",
-    "description",
-    "addresses",
-    "phones",
-    "email",
-    "account",
-  ])
+  check("logo")
     .optional()
-    .not()
-    .isEmpty()
-    .withMessage("Campo obrigatório"),
+    .isObject()
+    .withMessage("El campo debe ser de tipo:Object"),
+  ,
+  check(["images", "addresses", "phones", "email"])
+    .optional()
+    .isArray()
+    .withMessage("El campo debe ser de tipo:Array"),
+  check(["name", "description", "account"])
+    .optional()
+    .isString()
+    .withMessage("El campo debe ser de tipo:String"),
   (req, res, next) => {
     try {
       validationResult(req).throw();
