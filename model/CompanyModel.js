@@ -19,6 +19,6 @@ const Company = new Schema(
     versionKey: false,
     timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" },
   }
-); 
+);
 
 module.exports = mongoose.model("company", Company);
