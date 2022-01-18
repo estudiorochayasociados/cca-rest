@@ -19,7 +19,7 @@ router.get(
   Middleware.checkToken,
   UserValidator.validateRequest,
   async (req, res) => {
-    await UserController.list(req.body)
+    await UserController.list(req.params)
       .then((data) => {
         res.status(200).json(data);
       })
@@ -51,7 +51,7 @@ router.post(
     if (req.files) {
       if (req.files.avatar) {
         req.body.avatar = (
-          await ImagesController.uploadMany(req.files.avatar)
+          await ImagesController.uploads(req.files.avatar)
         )[0];
       }
     }
@@ -75,7 +75,7 @@ router.put(
     const view = await UserController.view(req.params.id);
     if (req.files) {
       if (req.files.avatar) {
-        const avatar = await ImagesController.uploadMany(req.files.avatar);
+        const avatar = await ImagesController.uploads(req.files.avatar);
         req.body.avatar = avatar[0];
         if (view.avatar) await ImagesController.deleteAll(view.avatar);
       }
