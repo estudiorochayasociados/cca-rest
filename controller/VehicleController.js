@@ -10,6 +10,38 @@ exports.list = async (filter = {}, limit, page) => {
   });
 };
 
+exports.filter = async (filter = {}) => {
+  return new Promise(async (resolve, reject) => {
+    let response = {};
+    await VehicleModel.distinct("model", filter, (error, result) => {
+      response.model = result;
+    });
+    await VehicleModel.distinct("brand", filter, (error, result) => {
+      response.brand = result;
+    });
+    await VehicleModel.distinct("fuel", filter, (error, result) => {
+      response.fuel = result;
+    });
+    await VehicleModel.distinct("status", filter, (error, result) => {
+      response.status = result;
+    });
+    await VehicleModel.distinct("doors", filter, (error, result) => {
+      response.doors = result;
+    });
+    await VehicleModel.distinct("color", filter, (error, result) => {
+      response.color = result;
+    });
+    await VehicleModel.distinct("direction", filter, (error, result) => {
+      response.direction = result;
+    });
+    await VehicleModel.distinct("transmission", filter, (error, result) => {
+      response.transmission = result;
+    });
+    resolve(response);
+  });
+};
+
+
 exports.create = (item) => {
   return new Promise((resolve, reject) => {
     VehicleModel.create(item, (err, res) => {
