@@ -27,8 +27,8 @@ exports.create = async (item) => {
 };
 
 exports.update = async (id, item) => {
-  item.password ? bcrypt.hashSync(item.password, salt) : "";
   return new Promise((resolve, reject) => {
+    if(item.password) item.password = bcrypt.hashSync(item.password, salt);
     UserModel.updateOne({ _id: ObjectId(id) }, { $set: item }, (err, res) => {
       if (err) reject(err.message);
       resolve(res);
