@@ -10,23 +10,16 @@ router.get("/", Middleware.checkToken, async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const page = parseInt(req.query.page, 10) || 1;
 
-  filter.regularPrice = { "$gte": filter.minPrice || 0, "$lte": filter.maxPrice || 999999999999999 }
+  filter.regularPrice = {
+    $gte: filter.minPrice || 0,
+    $lte: filter.maxPrice || 999999999999999,
+  };
 
   delete filter.minPrice;
   delete filter.maxPrice;
 
   await VehicleController.list(filter, limit, page)
     .then(async (data) => {
-      res.status(200).json(data);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
-});
-
-router.get("/filter", Middleware.checkToken, async (req, res) => {
-  await VehicleController.filter()
-    .then((data) => {
       res.status(200).json(data);
     })
     .catch((err) => {
@@ -111,7 +104,10 @@ router.put(
     const vehicle = await VehicleController.view(req.params.id);
     if (req.files) {
       if (req.files.images) {
-        req.body.images = [...vehicle.images, ...await ImagesController.uploads(req.files.images)];
+        req.body.images = [
+          ...vehicle.images,
+          ...(await ImagesController.uploads(req.files.images)),
+        ];
       }
     }
     if (req.body.additionalItems) {
@@ -132,5 +128,15 @@ router.put(
       });
   }
 );
+
+router.get("/filter", Middleware.checkToken, async (req, res) => {
+  await VehicleController.filter()
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
 
 module.exports = router;

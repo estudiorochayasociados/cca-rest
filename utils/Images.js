@@ -19,7 +19,6 @@ exports.upload = (file) => {
 
 exports.uploads = (files_input) => {
   return new Promise(async (resolve, reject) => {
-    // const uploader = async (path) => await this.uploads(path);
     const urls = [];
     const files = files_input;
     console.log(files);
