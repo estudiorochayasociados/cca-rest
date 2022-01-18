@@ -12,8 +12,9 @@ exports.validateRequest = [
     "account",
   ])
     .optional()
+    .not()
     .isEmpty()
-    .withMessage("Name is required"),
+    .withMessage("Campo obrigatório"),
   (req, res, next) => {
     try {
       validationResult(req).throw();

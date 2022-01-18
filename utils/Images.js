@@ -37,16 +37,22 @@ exports.uploadMany = (files_input) => {
 
 exports.deleteAll = (images) => {
   return new Promise((resolve, reject) => {
-    for (const image of images) {
-      cloudinary.uploader.destroy(image.public_id, function (error, result) {});
-    }
-    resolve(1);
+      for (const image of images) {
+          cloudinary.uploader.destroy(image.public_id, (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+          });
+      }
+      resolve(1);
   });
 };
 
 exports.delete = (public_id) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(public_id, function (error, result) {});
-    resolve(1);
+      cloudinary.uploader.destroy(public_id, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+      });
+      resolve(1);
   });
 };

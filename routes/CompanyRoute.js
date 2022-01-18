@@ -12,7 +12,8 @@ router.get(
   Middleware.checkToken,
   CompanyValidator.validateRequest,
   async (req, res) => {
-    await CompanyController.list(req.body)
+    let query = req.body;
+    await CompanyController.list(query)
       .then((data) => {
         res.status(200).json(data);
       })
