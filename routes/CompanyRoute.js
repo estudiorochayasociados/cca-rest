@@ -83,13 +83,6 @@ router.post(
   MulterController.fields([{ name: "images", maxCount: 10 }, { name: "logo", maxCount: 1 }]),
   async (req, res) => {
     if (req.files) {
-<<<<<<< HEAD
-      if (req.files.images)
-        req.body.images = await ImagesController.uploadMany(req.files.images);
-    }
-
-    if (req.body.logo) req.body.logo = JSON.parse(req.body.logo);
-=======
       if (req.files.images) {
         req.body.images = await ImagesController.uploads(req.files.images);
       }
@@ -98,7 +91,6 @@ router.post(
       }
     }
 
->>>>>>> 9fc1c5de04c252545833d55031a64b093380bf2c
     await CompanyController.create(req.body)
       .then((data) => {
         res.status(200).json(data);
