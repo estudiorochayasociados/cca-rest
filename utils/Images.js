@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: config.CLOUDINARY_SECRET,
 });
 
-exports.uploads = (file) => {
+exports.upload = (file) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(file, function (error, result) {
       resolve(result);
@@ -17,7 +17,7 @@ exports.uploads = (file) => {
   });
 };
 
-exports.uploadMany = (files_input) => {
+exports.uploads = (files_input) => {
   return new Promise(async (resolve, reject) => {
     // const uploader = async (path) => await this.uploads(path);
     const urls = [];
@@ -25,7 +25,7 @@ exports.uploadMany = (files_input) => {
     console.log(files);
     for (const file of files) {
       console.log(file.fieldname);
-      const newPath = await this.uploads(file.path);
+      const newPath = await this.upload(file.path);
       urls.push(newPath);
       console.log(file.path);
       fs.unlinkSync(file.path);
@@ -35,18 +35,25 @@ exports.uploadMany = (files_input) => {
   });
 };
 
+
 exports.deleteAll = (images) => {
-  return new Promise((resolve, reject) => {
-    for (const image of images) {
-      cloudinary.uploader.destroy(image.public_id, function (error, result) {});
-    }
-    resolve(1);
-  });
+    return new Promise((resolve, reject) => {
+        for (const image of images) {
+            cloudinary.uploader.destroy(image.public_id, (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            });
+        }
+        resolve(1);
+    });
 };
 
 exports.delete = (public_id) => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(public_id, function (error, result) {});
-    resolve(1);
-  });
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.destroy(public_id, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+        });
+        resolve(1);
+    });
 };

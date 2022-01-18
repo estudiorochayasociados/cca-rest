@@ -81,7 +81,7 @@ router.post(
   async (req, res) => {
     if (req.files) {
       if (req.files.images) {
-        req.body.images = await ImagesController.uploadMany(req.files.images);
+        req.body.images = await ImagesController.uploads(req.files.images);
       }
     }
     if (req.body.additionalItems) {
@@ -111,7 +111,7 @@ router.put(
     const vehicle = await VehicleController.view(req.params.id);
     if (req.files) {
       if (req.files.images) {
-        req.body.images = [...vehicle.images, ...await ImagesController.uploadMany(req.files.images)];
+        req.body.images = [...vehicle.images, ...await ImagesController.uploads(req.files.images)];
       }
     }
     if (req.body.additionalItems) {

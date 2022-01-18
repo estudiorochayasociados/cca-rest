@@ -1,7 +1,7 @@
 const CompanyModel = require("../model/CompanyModel");
 var ObjectId = require("mongoose").Types.ObjectId;
 
-exports.list = async (filter = {}) => {
+exports.list = async (filter) => {
   return new Promise((resolve, reject) => {
     CompanyModel.find(filter, (err, res) => {
       if (err) reject(err.message);
@@ -12,10 +12,13 @@ exports.list = async (filter = {}) => {
 
 exports.create = (item) => {
   item = JSON.parse(JSON.stringify(item));
-  if(item.hasOwnProperty("phones")) item.phones = this.validateEmptyArray(item.phones);
-  if(item.hasOwnProperty("email")) item.email = this.validateEmptyArray(item.email);
-  if(item.hasOwnProperty("addresses")) item.addresses = this.validateEmptyArray(item.addresses);
-  
+  if (item.hasOwnProperty("phones"))
+    item.phones = this.validateEmptyArray(item.phones);
+  if (item.hasOwnProperty("email"))
+    item.email = this.validateEmptyArray(item.email);
+  if (item.hasOwnProperty("addresses"))
+    item.addresses = this.validateEmptyArray(item.addresses);
+
   return new Promise((resolve, reject) => {
     CompanyModel.create(item, (err, res) => {
       if (err) reject(err.message);
@@ -26,10 +29,13 @@ exports.create = (item) => {
 
 exports.update = (id, item) => {
   item = JSON.parse(JSON.stringify(item));
-  if(item.hasOwnProperty("phones")) item.phones = this.validateEmptyArray(item.phones);
-  if(item.hasOwnProperty("email")) item.email = this.validateEmptyArray(item.email);
-  if(item.hasOwnProperty("addresses")) item.addresses = this.validateEmptyArray(item.addresses);
-  
+  if (item.hasOwnProperty("phones"))
+    item.phones = this.validateEmptyArray(item.phones);
+  if (item.hasOwnProperty("email"))
+    item.email = this.validateEmptyArray(item.email);
+  if (item.hasOwnProperty("addresses"))
+    item.addresses = this.validateEmptyArray(item.addresses);
+
   return new Promise((resolve, reject) => {
     CompanyModel.updateOne(
       { _id: ObjectId(id) },
@@ -92,4 +98,4 @@ exports.validateEmptyArray = (item) => {
   item = item.filter((n) => n);
   console.log(item);
   return item;
-};
+}; 

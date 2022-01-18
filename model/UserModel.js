@@ -25,13 +25,14 @@ const User = new Schema(
     },
     company: { type: Schema.Types.ObjectId, ref: "Company" },
     status: {
-      type: String,
+      type: Boolean,
       required: true,
       default: true,
     },
     role: {
       type: String,
       required: true,
+      enum: ["admin", "user", "company"],
       default: "user",
     },
   },
