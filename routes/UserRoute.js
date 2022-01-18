@@ -34,7 +34,8 @@ router.get(
   Middleware.checkToken,
   UserValidator.validateRequest,
   async (req, res) => {
-    await UserController.view(req.params.id)
+    let id = req.params.id.toString();
+    await UserController.view(id)
       .then((data) => {
         res.status(200).json(data);
       })
@@ -50,9 +51,7 @@ router.post(
   async (req, res) => {
     if (req.files) {
       if (req.files.avatar) {
-        req.body.avatar = (
-          await ImagesController.uploads(req.files.avatar)
-        )[0];
+        req.body.avatar = (await ImagesController.uploads(req.files.avatar))[0];
       }
     }
     await UserController.create(req.body)
@@ -134,7 +133,6 @@ router.delete(
 router.post("/auth", async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
     .then(async (data) => {
-      // console.log(data);
       let dataResponse = {
         message: "Autenticación correcta",
         token: jwt.sign({ check: true }, process.env.JWT, {
