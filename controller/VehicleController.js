@@ -34,10 +34,10 @@ exports.filter = async (filter = {}) => {
     await VehicleModel.distinct("direction", filter, (error, result) => {
       response.direction = result;
     });
-    await VehicleModel.distinct("transmission", filter, (error, result) => {
+    await VehicleModel.distinct("transmission", filter).then((result) => {
       response.transmission = result;
+      resolve(response);
     });
-    resolve(response);
   });
 };
 
