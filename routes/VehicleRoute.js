@@ -16,6 +16,16 @@ router.get("/", Middleware.checkToken, async (req, res) => {
   delete filter.maxPrice;
 
   await VehicleController.list(filter, limit, page)
+    .then(async (data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
+
+router.get("/filter", Middleware.checkToken, async (req, res) => {
+  await VehicleController.filter()
     .then((data) => {
       res.status(200).json(data);
     })
