@@ -3,7 +3,7 @@ const VehicleController = require("../controller/VehicleController");
 const Middleware = require("../config/Middleware");
 const MulterController = require("../utils/Multer");
 const ImagesController = require("../utils/Images");
-const router = express.Router();
+const router = express.Router({ strict: true });
 
 router.get("/", Middleware.checkToken, async (req, res) => {
   var filter = JSON.parse(req.query.filter);
@@ -129,7 +129,7 @@ router.put(
   }
 );
 
-router.get("/filter", Middleware.checkToken, async (req, res) => {
+router.get("/filter/", Middleware.checkToken, async (req, res) => {
   await VehicleController.filter()
     .then((data) => {
       res.status(200).json(data);
