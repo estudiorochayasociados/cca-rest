@@ -19,7 +19,7 @@ router.get(
   Middleware.checkToken,
   UserValidator.validateRequest,
   async (req, res) => {
-    await UserController.list(req.params)
+    await UserController.list(req.query)
       .then((data) => {
         res.status(200).json(data);
       })
