@@ -143,6 +143,7 @@ router.post("/auth", async (req, res) => {
         role: await bcrypt.hash(data.role, salt),
         company: data.company,
         email: data.email,
+        avatar: data.avatar.get("url"),
         id: data._id,
       };
       res.status(200).json(dataResponse);
