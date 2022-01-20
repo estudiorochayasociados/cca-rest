@@ -7,13 +7,6 @@ const UserValidator = require("../validators/UserValidator");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-const bcrypt = require("bcrypt");
-const config = process.env.SALT
-  ? process.env
-  : require("dotenv").config().parsed;
-
-const salt = bcrypt.genSaltSync(parseInt(config.SALT));
-
 router.get(
   "/",
   Middleware.checkToken,
@@ -140,7 +133,7 @@ router.post("/auth", async (req, res) => {
         }),
         name: data.name,
         surname: data.surname,
-        role: await bcrypt.hash(data.role, salt),
+        role: data.role,
         company: data.company,
         email: data.email,
         avatar: data.avatar.get("url"),
