@@ -2,7 +2,7 @@ const faker = require("faker");
 const mongodb = require("../config/MongoDB");
 const VehicleController = require("../controller/VehicleController");
 const item = {};
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 25; i++) {
     item.color = faker.random.arrayElement(["ROJO", "NEGRO", "BLANCO", "AZUL", "ROSADO", "VIOLETA", "MARINO", "AMARILLO", "GRIS", "VERDE", "ANARANJADO",]);
     item.description = faker.lorem.words(25);
     item.direction = faker.random.arrayElement([
@@ -13,79 +13,31 @@ for (let i = 0; i < 20; i++) {
     item.transmission = faker.random.arrayElement(["MANUAL", "AUTOMÁTICO"]);
     item.status = faker.random.arrayElement(["NUEVO", "USADO"]);
     item.status_publication = faker.random.arrayElement(["ENABLED", "DISABLED"]);
-    item.brand = "FIAT";
+    item.brand = "MITSUBISHI";
     item.model = faker.random.arrayElement([
-        "147",
-        "500",
-        "ARGO",
-        "BARCHETTA",
-        "BRAVO",
-        "BRIO",
-        "DUCATO",
-        "DUNA",
-        "FIORINO",
-        "GRAND SIENA",
-        "IDEA",
-        "LINEA",
-        "MAREA",
-        "MAREA WEEKEND",
-        "MOBI",
-        "PALIO",
-        "PALIO WEEKEND",
-        "PUNTO",
-        "QUBO",
-        "REGATA",
-        "SIENA",
-        "SPAZIO",
-        "STILO",
-        "STRADA",
-        "STRADA ADVENTURE",
-        "TEMPRA",
-        "TIPO",
-        "TORO",
-        "UNO",
-        "VIVACE",
-        "125",
-        "128",
-        "132",
-        "133",
-        "1500",
-        "1600",
-        "128 SUPER EUROPA",
-        "UNO WAY",
-        "COUPE",
-        "128 EUROPA",
-        "BRAVA",
-        "UNO FIRE",
-        "OGGI",
-        "PANORAMA",
-        "PREMIO",
-        "SPIDER",
-        "PANDA",
-        "600",
-        "SCUDO",
-        "1300",
-        "CROMA",
-        "850",
-        "TALENTO",
-        "ULYSSE",
-        "1100",
-        "150",
-        "CARGO",
-        "UNO NOVO",
-        "124",
-        "EVO",
-        "851",
-        "145",
-        "146",
-        "750",
-        "MULTICARGA",
-        "673",
-        "619",
-        "DOBLO",
-        "DOBLO CARGO",
-        "CRONOS",
-        "FREEMONT"
+        "COLT",
+        "ECLIPSE",
+        "GALANT",
+        "L100",
+        "L200",
+        "L300",
+        "LANCER",
+        "MIRAGE",
+        "MONTERO",
+        "OUTLANDER",
+        "SPACE WAGON",
+        "SAPORO",
+        "PAJERO",
+        "3000",
+        "CANTER",
+        "CARISMA",
+        "L400",
+        "SIGMA",
+        "EVOLUTION",
+        "380",
+        "SHOGUN",
+        "AUTOELEVADOR",
+        "ASX"
       ]);
     item.regularPrice = faker.random.number({ min: 600000, max: 10000000 });
     item.resellerPrice = faker.random.number({
@@ -98,7 +50,7 @@ for (let i = 0; i < 20; i++) {
     });
     item.doors = faker.random.arrayElement(["2", "3", "4", "5"]);
     item.fuel = faker.random.arrayElement(["NAFTA", "GASOIL", "DIESEL", "HÍBRIDO", "ELÉCTRICO"]);
-    item.company = faker.random.arrayElement(["61e57fa87903d21ef8f886ad", "61e6ce3a740ac513d41885a3", "61e6ce55740ac513d41885a7"]);
+    item.company = faker.random.arrayElement(["61ea981f259f3d1f20a99c25", "61ea9be535432c3994580408", "61ea9c3835432c399458040b", "61ea9c7235432c399458040e", "61ea9d1d35432c3994580411"]);
     item.images = [
         {
             url: faker.image.imageUrl(),

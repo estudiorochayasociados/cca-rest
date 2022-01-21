@@ -13,7 +13,7 @@ const Company = new Schema(
     description: String,
     addresses: Array,
     phones: Array,
-    email: Array,
+    emails: Array,
   },
   {
     versionKey: false,
