@@ -3,7 +3,7 @@ var ObjectId = require("mongoose").Types.ObjectId;
 
 exports.list = async (filter, limit, page) => {
   return new Promise((resolve, reject) => {
-    VehicleModel.paginate(filter, { limit, page, populate: "company" }, (err, res) => {
+    VehicleModel.paginate(filter, { limit, page, populate: {path: "company", select: "name"} }, (err, res) => {
       if (err) reject(err.message);
       resolve(res);
     });
