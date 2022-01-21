@@ -67,8 +67,7 @@ router.put(
     const view = await UserController.view(req.params.id);
     if (req.files) {
       if (req.files.avatar) {
-        const avatar = await ImagesController.uploads(req.files.avatar);
-        req.body.avatar = avatar[0];
+        req.body.avatar = (await ImagesController.uploads(req.files.avatar))[0];
         if (view.avatar) await ImagesController.deleteAll(view.avatar);
       }
     }
@@ -126,6 +125,7 @@ router.delete(
 router.post("/auth", async (req, res) => {
   await UserController.login(req.body.email, req.body.password)
     .then(async (data) => {
+      console.log("DATA =>", data)
       let dataResponse = {
         message: "Autenticación correcta",
         token: jwt.sign({ check: true }, process.env.JWT, {
@@ -136,8 +136,9 @@ router.post("/auth", async (req, res) => {
         role: data.role,
         company: data.company,
         email: data.email,
-        avatar: data.avatar.get("url"),
+        avatar: (data.avatar) ? data.avatar.get('url') : 'https://res.cloudinary.com/estudio-rocha/image/upload/v1642779901/sin_avatar_e1raga.png',
         id: data._id,
+        status: data.status,
       };
       res.status(200).json(dataResponse);
     })
