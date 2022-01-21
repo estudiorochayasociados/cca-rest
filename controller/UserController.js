@@ -59,7 +59,7 @@ exports.deleteOneImage = (id, image) => {
   return new Promise((resolve, reject) => {
     UserModel.updateOne(
       { _id: ObjectId(id) },
-      { $pull: { avatar: { public_id: image } } },
+      { $unset: { avatar: { public_id: image } } },
       (err, res) => {
         if (err) reject(err.message);
         resolve(res);
