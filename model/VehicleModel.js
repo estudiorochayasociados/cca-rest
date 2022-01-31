@@ -31,8 +31,7 @@ const Vehicle = new Schema(
     },
     status: {
       type: String,
-      required: "Ingresar un estado",
-      uppercase: true,
+      required: "Ingresar un estado"
     },
     brand: {
       type: String,
@@ -62,8 +61,9 @@ const Vehicle = new Schema(
     company: { type: Schema.Types.ObjectId, ref: "Company", required: true },
     status_publication: {
       type: String,
-      required: "Ingresar un estado",
-      uppercase: true,
+      required: "Ingresar un estado de publicación",
+      enum: ['PUBLICADO', 'NO PUBLICADO', 'EN REVISIÓN'],
+      uppercase: true
     },
   },
   {

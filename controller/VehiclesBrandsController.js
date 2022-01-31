@@ -1,5 +1,7 @@
 const VehiclesBrands = require("../model/VehiclesBrandsModel");
 var ObjectId = require("mongoose").Types.ObjectId;
+const VehicleModel = require("../model/VehicleModel");
+const VehicleController = require("../controller/VehicleController");
 
 exports.list = async (filter = {}) => {
   return new Promise((resolve, reject) => {
@@ -20,15 +22,52 @@ exports.create = (item) => {
 };
 
 exports.update = (id, item) => {
+  var differences = {};
+  var olds = [];
   return new Promise((resolve, reject) => {
-    VehiclesBrands.updateOne(
-      { _id: ObjectId(id) },
-      { $set: item },
-      (err, res) => {
-        if (err) reject(err.message);
-        resolve(res);
+    this.view(id).then((response) => {
+      if (response.name != item.name) {
+        differences.name = response.name;
       }
-    );
+
+      differences.options = response.options.filter(x => item.options.indexOf(x) === -1);
+      olds = item.options.filter(x => response.options.indexOf(x) === -1);
+
+      VehiclesBrands.updateOne(
+        { _id: ObjectId(id) },
+        { $set: item },
+        (err, res) => {
+          if (err) {
+            reject(err.message);
+          } else {
+            if (differences.name) {
+              VehicleController.updateMany({ brand: differences.name }, { "brand": item.name });
+              if (differences.options.length > 0) {
+                differences.options.forEach((element, key) => {
+                  VehicleController.updateMany({ model: element }, { "model": olds[key] }).catch((error) => {
+                    console.log(error);
+                  });
+                  resolve(res);
+                });
+              } else {
+                resolve(res);
+              }
+            } else {
+              if (differences.options.length > 0) {
+                differences.options.forEach((element, key) => {
+                  VehicleController.updateMany({ model: element }, { "model": olds[key] }).catch((error) => {
+                    console.log(error);
+                  });
+                  resolve(res);
+                });
+              }
+            }
+          }
+        }
+      );
+    }).catch((error) => {
+      reject(error.message)
+    })
   });
 };
 

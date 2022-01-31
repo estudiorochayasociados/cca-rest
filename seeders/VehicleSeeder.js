@@ -11,34 +11,10 @@ for (let i = 0; i < 25; i++) {
         "MECÁNICA",
     ]);
     item.transmission = faker.random.arrayElement(["MANUAL", "AUTOMÁTICO"]);
-    item.status = faker.random.arrayElement(["NUEVO", "USADO"]);
-    item.status_publication = faker.random.arrayElement(["ENABLED", "DISABLED"]);
-    item.brand = "MITSUBISHI";
-    item.model = faker.random.arrayElement([
-        "COLT",
-        "ECLIPSE",
-        "GALANT",
-        "L100",
-        "L200",
-        "L300",
-        "LANCER",
-        "MIRAGE",
-        "MONTERO",
-        "OUTLANDER",
-        "SPACE WAGON",
-        "SAPORO",
-        "PAJERO",
-        "3000",
-        "CANTER",
-        "CARISMA",
-        "L400",
-        "SIGMA",
-        "EVOLUTION",
-        "380",
-        "SHOGUN",
-        "AUTOELEVADOR",
-        "ASX"
-      ]);
+    item.status = faker.random.arrayElement(["USADO", "NUEVO"]);
+    item.status_publication = faker.random.arrayElement(['PUBLICADO', 'NO PUBLICADO', 'EN REVISIÓN']);
+    item.brand = "PRUEBA 2";
+    item.model = faker.random.arrayElement(["MOTOMEL", "YAMAHA"]);
     item.regularPrice = faker.random.number({ min: 600000, max: 10000000 });
     item.resellerPrice = faker.random.number({
         min: item.regularPrice,
