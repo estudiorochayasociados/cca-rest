@@ -100,3 +100,21 @@ exports.filter = async (filter = {}) => {
     });
   });
 };
+
+exports.updateMany = (filter, toSet) => {
+  return new Promise((resolve, reject) => {
+    VehicleModel.updateMany(filter, { $set: toSet }, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
+};
+
+exports.deleteMany = (filter) => {
+  return new Promise((resolve, reject) => {
+    VehicleModel.deleteMany(filter, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
+};

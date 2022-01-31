@@ -4,6 +4,7 @@ const MulterController = require("../utils/Multer");
 const ImagesController = require("../utils/Images");
 const Middleware = require("../config/Middleware");
 const CompanyValidator = require("../validators/CompanyValidator");
+const VehicleController = require("../controller/VehicleController");
 
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router.delete(
     const view = await CompanyController.view(req.params.id);
     await CompanyController.delete(req.params.id)
       .then(async (data) => {
+        await VehicleController.deleteMany({ company: req.params.id });
         await ImagesController.deleteAll(view.images);
         await ImagesController.deleteAll([view.logo]);
         res.status(200).json(data);
@@ -63,7 +65,6 @@ router.delete(
   async (req, res) => {
     await ImagesController.delete(req.params.id_cloudinary)
       .then(async (data) => {
-        console.log(data);
         const resFinal = await CompanyController.deleteOneImage(
           req.params.id,
           req.params.id_cloudinary
