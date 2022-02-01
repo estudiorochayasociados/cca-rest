@@ -77,6 +77,8 @@ router.delete(
   }
 );
 
+const sharp = require("sharp");
+
 router.post(
   "/",
   Middleware.checkToken,

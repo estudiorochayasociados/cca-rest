@@ -1,5 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
+const sharp = require("sharp");
+
 const config = process.env.CLOUDINARY_NAME
   ? process.env
   : require("dotenv").config().parsed;
@@ -21,38 +23,48 @@ exports.uploads = (files_input) => {
   return new Promise(async (resolve, reject) => {
     const urls = [];
     const files = files_input;
-    console.log(files);
     for (const file of files) {
-      console.log(file.fieldname);
-      const newPath = await this.upload(file.path);
+      await this.resize(file);
+      const newPath = await this.upload('./uploads/r_' + file.filename);
       urls.push(newPath);
-      console.log(file.path);
       fs.unlinkSync(file.path);
+      fs.unlinkSync('./uploads/r_' + file.filename);
     }
-
     resolve(urls);
+  });
+};
+
+exports.resize = (file) => {
+  return new Promise(async (resolve, reject) => {
+    console.log(file);
+    sharp(file.path).resize({
+        fit: sharp.fit.contain,
+        width: 800
+    }).jpeg().toFile('./uploads/r_' + file.filename, (err, res) => {
+      resolve(res);
+    })       
   });
 };
 
 
 exports.deleteAll = (images) => {
-    return new Promise((resolve, reject) => {
-        for (const image of images) {
-            cloudinary.uploader.destroy(image.public_id, (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
-            });
-        }
-        resolve(1);
-    });
+  return new Promise((resolve, reject) => {
+    for (const image of images) {
+      cloudinary.uploader.destroy(image.public_id, (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    }
+    resolve(1);
+  });
 };
 
 exports.delete = (public_id) => {
-    return new Promise((resolve, reject) => {
-        cloudinary.uploader.destroy(public_id, (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-        });
-        resolve(1);
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(public_id, (error, result) => {
+      if (error) reject(error);
+      else resolve(result);
     });
+    resolve(1);
+  });
 };
