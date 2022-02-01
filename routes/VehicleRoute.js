@@ -130,7 +130,12 @@ router.put(
 );
 
 router.get("/filter/:company", Middleware.checkToken, async (req, res) => {
-  await VehicleController.filter(req.params)
+  const filterOptions = {
+    company: req.params.company,
+    status_publication: ['PUBLICADO', 'NO PUBLICADO', 'EN REVISIÓN']
+  }
+
+  await VehicleController.filter(filterOptions)
     .then((data) => {
       res.status(200).json(data);
     })
@@ -140,7 +145,11 @@ router.get("/filter/:company", Middleware.checkToken, async (req, res) => {
 });
 
 router.get("/filter/", Middleware.checkToken, async (req, res) => {
-  await VehicleController.filter()
+  const filterOptions = {
+    status_publication: ['PUBLICADO']
+  }
+
+  await VehicleController.filter(filterOptions)
     .then((data) => {
       res.status(200).json(data);
     })
