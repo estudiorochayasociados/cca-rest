@@ -44,9 +44,7 @@ exports.update = (id, item) => {
               VehicleController.updateMany({ brand: differences.name }, { "brand": item.name });
               if (differences.options.length > 0) {
                 differences.options.forEach((element, key) => {
-                  VehicleController.updateMany({ model: element }, { "model": olds[key] }).catch((error) => {
-                    console.log(error);
-                  });
+                  VehicleController.updateMany({ model: element }, { "model": olds[key] });
                   resolve(res);
                 });
               } else {
@@ -55,9 +53,7 @@ exports.update = (id, item) => {
             } else {
               if (differences.options.length > 0) {
                 differences.options.forEach((element, key) => {
-                  VehicleController.updateMany({ model: element }, { "model": olds[key] }).catch((error) => {
-                    console.log(error);
-                  });
+                  VehicleController.updateMany({ model: element }, { "model": olds[key] });
                   resolve(res);
                 });
               }

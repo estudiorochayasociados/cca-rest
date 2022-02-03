@@ -96,6 +96,5 @@ exports.view = (id) => {
 exports.validateEmptyArray = (item) => {
   item = typeof item === "string" ? [item] : Object.values(item);
   item = item.filter((n) => n);
-  console.log(item);
   return item;
 }; 

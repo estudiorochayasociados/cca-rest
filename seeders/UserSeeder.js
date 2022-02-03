@@ -16,5 +16,4 @@ for (let i = 0; i < 20; i++) {
       "61e6ce55740ac513d41885a7",
     ]),
   });
-  console.log(user);
 }

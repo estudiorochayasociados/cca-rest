@@ -55,7 +55,6 @@ exports.delete = (id) => {
 };
 
 exports.deleteOneImage = (id, image) => {
-  console.log(id, image);
   return new Promise((resolve, reject) => {
     UserModel.updateOne(
       { _id: ObjectId(id) },

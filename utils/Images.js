@@ -36,13 +36,12 @@ exports.uploads = (files_input) => {
 
 exports.resize = (file) => {
   return new Promise(async (resolve, reject) => {
-    console.log(file);
     sharp(file.path).resize({
-        fit: sharp.fit.contain,
-        width: 800
+      fit: sharp.fit.contain,
+      width: 800
     }).jpeg().toFile('./uploads/r_' + file.filename, (err, res) => {
       resolve(res);
-    })       
+    })
   });
 };
 
