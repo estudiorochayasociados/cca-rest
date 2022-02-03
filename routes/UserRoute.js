@@ -52,7 +52,6 @@ router.post(
         res.status(200).json(data);
       })
       .catch((err) => {
-        console.log("ERROR =>", err);
         res.status(500).json({ error: err });
       });
   }
@@ -86,14 +85,11 @@ router.delete(
   Middleware.checkToken,
   UserValidator.validateRequest,
   async (req, res) => {
-    console.log("ID =>", req.params.id);
     const view = await UserController.view(req.params.id);
-
-    console.log("View =>", view);
 
     await UserController.delete(req.params.id)
       .then(async (data) => {
-        await ImagesController.deleteAll(view.avatar);
+        await ImagesController.delete(view.avatar.get('public_id'));
         res.status(200).json(data);
       })
       .catch((err) => {
@@ -109,7 +105,6 @@ router.delete(
   async (req, res) => {
     await ImagesController.delete(req.params.id_cloudinary)
       .then(async (data) => {
-        console.log(data);
         await UserController.deleteOneImage(
           req.params.id,
           req.params.id_cloudinary

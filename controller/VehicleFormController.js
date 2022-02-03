@@ -42,9 +42,7 @@ exports.update = (id, item) => {
                 let dataSet = {};
                 dataSet[response.name] = olds[key];
 
-                VehicleController.updateMany(data, dataSet).catch((error) => {
-                  console.log(error);
-                });
+                VehicleController.updateMany(data, dataSet);
                 resolve(res);
               });
             }

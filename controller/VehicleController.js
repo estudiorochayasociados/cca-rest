@@ -37,7 +37,6 @@ exports.update = (id, item) => {
 };
 
 exports.deleteOneImage = (id, image) => {
-  console.log(id, image);
   return new Promise((resolve, reject) => {
     VehicleModel.updateOne(
       { _id: ObjectId(id) },

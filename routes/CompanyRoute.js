@@ -49,7 +49,7 @@ router.delete(
       .then(async (data) => {
         await VehicleController.deleteMany({ company: req.params.id });
         await ImagesController.deleteAll(view.images);
-        await ImagesController.deleteAll([view.logo]);
+        await ImagesController.delete(view.logo.get('public_id'));
         res.status(200).json(data);
       })
       .catch((err) => {
@@ -76,8 +76,6 @@ router.delete(
       });
   }
 );
-
-const sharp = require("sharp");
 
 router.post(
   "/",
