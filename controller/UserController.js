@@ -84,3 +84,12 @@ exports.login = async (email, password) => {
     });
   });
 };
+
+exports.deleteMany = (filter) => {
+  return new Promise((resolve, reject) => {
+    UserModel.deleteMany(filter, (err, res) => {
+      if (err) reject(err.message);
+      resolve(res);
+    });
+  });
+};
