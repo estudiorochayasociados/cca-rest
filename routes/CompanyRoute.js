@@ -115,7 +115,7 @@ router.put(
       if (req.files.images)
         req.body.images = [
           ...company.images,
-          ...(await ImagesController.uploadMany(req.files.images)),
+          ...(await ImagesController.uploads(req.files.images)),
         ];
       if (req.files.logo)
         req.body.logo = [
