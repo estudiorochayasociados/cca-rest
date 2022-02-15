@@ -74,6 +74,7 @@ router.delete(
         res.status(200).json(resFinal);
       })
       .catch((err) => {
+        console.log(err);
         res.status(500).json({ error: err });
       });
   }
@@ -118,10 +119,7 @@ router.put(
           ...(await ImagesController.uploads(req.files.images)),
         ];
       if (req.files.logo)
-        req.body.logo = [
-          ...company.logo,
-          ...(await ImagesController.uploads(req.files.logo))[0],
-        ];
+        req.body.logo = (await ImagesController.uploads(req.files.logo))[0];
     }
 
     await CompanyController.update(req.params.id, req.body)
