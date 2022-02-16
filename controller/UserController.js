@@ -21,7 +21,6 @@ exports.list = async (filter = {}) => {
 
 exports.create = async (item) => {
   item.password = await bcrypt.hash(item.password, salt)
-  item.email = await this.delete.item;
   return new Promise((resolve, reject) => {
     UserModel.create(item, (err, res) => {
       if (err) {
@@ -34,6 +33,7 @@ exports.create = async (item) => {
 };
 
 exports.update = async (id, item) => {
+  delete item.email;
   return new Promise((resolve, reject) => {
     if (item.password) item.password = bcrypt.hashSync(item.password, salt);
     UserModel.updateOne({ _id: ObjectId(id) }, { $set: item }, (err, res) => {
