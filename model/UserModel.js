@@ -15,9 +15,9 @@ const User = new Schema(
     avatar: Map,
     email: {
       type: String,
+      index: { unique: true },
       required: true,
       validate: [isEmail, "invalid email"],
-      createIndexes: { unique: true },
     },
     password: {
       type: String,

@@ -20,7 +20,8 @@ exports.list = async (filter = {}) => {
 };
 
 exports.create = async (item) => {
-  item.password = await bcrypt.hash(item.password, salt);
+  item.password = await bcrypt.hash(item.password, salt)
+  item.email = await this.delete.item;
   return new Promise((resolve, reject) => {
     UserModel.create(item, (err, res) => {
       if (err) {
