@@ -8,4 +8,3 @@ const config  = (process.env.MONGO_DB) ? process.env : require('dotenv').config(
         console.log('Connected to Server successfully!');
     }
 });
-
