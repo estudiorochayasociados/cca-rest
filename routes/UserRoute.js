@@ -10,7 +10,6 @@ const router = express.Router();
 router.get(
   "/",
   Middleware.checkToken,
-  UserValidator.validateRequest,
   async (req, res) => {
     await UserController.list(req.query)
       .then((data) => {
@@ -25,7 +24,6 @@ router.get(
 router.get(
   "/:id",
   Middleware.checkToken,
-  UserValidator.validateRequest,
   async (req, res) => {
     let id = req.params.id.toString();
     await UserController.view(id)
@@ -41,6 +39,7 @@ router.get(
 router.post(
   "/",
   MulterController.fields([{ name: "avatar", maxCount: 1 }]),
+  UserValidator.validateRequest,
   async (req, res) => {
     if (req.files) {
       if (req.files.avatar) {
