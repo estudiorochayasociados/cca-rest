@@ -19,12 +19,17 @@ exports.upload = (file) => {
   });
 };
 
-exports.uploads = (files_input) => {
+exports.uploads = (files_input, company = '') => {
   return new Promise(async (resolve, reject) => {
     const urls = [];
     const files = files_input;
     for (const file of files) {
-      await this.resize(file);
+      if(company == "company"){
+        await this.resize(file, 1200);
+      }
+      else{
+        await this.resize(file, 800)
+      }
       const newPath = await this.upload('./uploads/r_' + file.filename);
       urls.push(newPath);
       fs.unlinkSync(file.path);
@@ -34,11 +39,11 @@ exports.uploads = (files_input) => {
   });
 };
 
-exports.resize = (file) => {
+exports.resize = (file, widthData) => {
   return new Promise(async (resolve, reject) => {
     sharp(file.path).resize({
       fit: sharp.fit.contain,
-      width: 800
+      width: widthData
     }).jpeg().toFile('./uploads/r_' + file.filename, (err, res) => {
       resolve(res);
     })

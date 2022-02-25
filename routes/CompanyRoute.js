@@ -86,12 +86,13 @@ router.post(
   CompanyValidator.validateRequest,
   MulterController.fields([{ name: "images", maxCount: 10 }, { name: "logo", maxCount: 1 }]),
   async (req, res) => {
+    console.log(req.body.company);
     if (req.files) {
       if (req.files.images) {
-        req.body.images = await ImagesController.uploads(req.files.images);
+        req.body.images = await ImagesController.uploads(req.files.images, "company");
       }
       if (req.files.logo) {
-        req.body.logo = (await ImagesController.uploads(req.files.logo))[0];
+        req.body.logo = (await ImagesController.uploads(req.files.logo, "company"))[0];
       }
     }
 
@@ -116,10 +117,10 @@ router.put(
       if (req.files.images)
         req.body.images = [
           ...company.images,
-          ...(await ImagesController.uploads(req.files.images)),
+          ...(await ImagesController.uploads(req.files.images, "company")),
         ];
       if (req.files.logo)
-        req.body.logo = (await ImagesController.uploads(req.files.logo))[0];
+        req.body.logo = (await ImagesController.uploads(req.files.logo, "company"))[0];
     }
 
     await CompanyController.update(req.params.id, req.body)
