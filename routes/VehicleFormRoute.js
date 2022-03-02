@@ -45,11 +45,15 @@ router.post("/", Middleware.checkToken, async (req, res) => {
 });
 
 router.put("/:id", Middleware.checkToken, async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
   await VehicleForm.update(req.params.id, req.body)
     .then((data) => {
+      console.log(data);
       res.status(200).json(data);
     })
     .catch((err) => {
+      console.log("ERROR", err)
       res.status(500).json({ error: err });
     });
 });

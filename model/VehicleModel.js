@@ -20,6 +20,22 @@ const Vehicle = new Schema(
       required: "Ingresar una dirección",
       uppercase: true,
     },
+    currency:{
+      type: String,
+      required: "Ingresar un tipo de moneda",
+      enum: ['ARS', 'USD'],
+      uppercase: true,
+    },
+    year:{
+      type: Number,
+      required: "Ingresa un año",
+      uppercase: true,
+    },
+    engine:{
+      type: String,
+      required: "Ingresa un tipo de motor",
+      uppercase: true,
+    },
     transmission: {
       type: String,
       required: "Ingresar la transmisión del vehículo",

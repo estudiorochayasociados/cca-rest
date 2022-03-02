@@ -45,6 +45,8 @@ exports.update = (id, item) => {
                 VehicleController.updateMany(data, dataSet);
                 resolve(res);
               });
+            } else {
+              resolve(res);
             }
           }
         }).catch((error) => {
