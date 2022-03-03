@@ -5,7 +5,7 @@ const VehicleForm = new Schema(
   {
     name: {
       type: String,
-      required: "Ingresar una nombre",
+      required: "Ingresar un nombre",
       unique: true
     },
     options: {
