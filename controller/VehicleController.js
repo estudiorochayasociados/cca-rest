@@ -95,18 +95,12 @@ exports.filter = async (filter = {}) => {
     });
     await VehicleModel.distinct("transmission", filter).then((result) => {
       response.transmission = result;
-      resolve(response);
     });
     await VehicleModel.distinct("engine", filter).then((result) => {
       response.engine = result;
-      resolve(response);
     });
     await VehicleModel.distinct("year", filter).then((result) => {
       response.year = result;
-      resolve(response);
-    });
-    await VehicleModel.distinct("currency", filter).then((result) => {
-      response.currency = result;
       resolve(response);
     });
   });
